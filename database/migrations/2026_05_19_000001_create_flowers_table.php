@@ -1,0 +1,33 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('flowers', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('slug')->unique();
+            $table->text('description')->nullable();
+            $table->unsignedInteger('price');
+            $table->string('image')->nullable();
+            $table->string('flower_language');
+            $table->string('color')->nullable();
+            $table->string('category')->default('other');
+            $table->unsignedInteger('stock')->default(100);
+            $table->boolean('is_seasonal')->default(false);
+            $table->string('season')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('flowers');
+    }
+};
