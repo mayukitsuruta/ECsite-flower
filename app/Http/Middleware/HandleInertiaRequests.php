@@ -39,7 +39,7 @@ class HandleInertiaRequests extends Middleware
             ],
             'cartCount' => $cart->count(),
             'shop' => [
-                'name' => 'omoi bouquet',
+                'name' => 'omoi bouqueteee',
                 'tagline' => '大切な人への想いを選び、花で束ねる一点もののフラワーショップ',
             ],
             'flash' => [
