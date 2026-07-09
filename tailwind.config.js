@@ -17,6 +17,12 @@ export default {
                 serif: ['"Noto Serif JP"', 'Georgia', ...defaultTheme.fontFamily.serif],
             },
             colors: {
+                cream: {
+                    DEFAULT: '#f5efe6',
+                    50: '#faf7f2',
+                    100: '#f5efe6',
+                    200: '#ebe0d0',
+                },
                 bloom: {
                     50: '#fdf8f6',
                     100: '#f9ede8',

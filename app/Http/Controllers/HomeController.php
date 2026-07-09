@@ -16,9 +16,9 @@ class HomeController extends Controller
                 ->orderBy('name')
                 ->limit(6)
                 ->get(),
-            'popularFlowers' => Flower::active()
+            'shopFlowers' => Flower::active()
                 ->orderBy('price')
-                ->limit(4)
+                ->limit(8)
                 ->get(),
         ]);
     }
