@@ -13,8 +13,8 @@
 1. MAMP アプリを開く
 2. **Start** で Apache と MySQL を起動
 3. ポート確認（デフォルト例）
-   - Apache: `8888`
-   - MySQL: `8889`
+    - Apache: `8888`
+    - MySQL: `8889`
 
 ## 2. データベースの準備（MySQL を使う場合）
 
@@ -80,10 +80,10 @@ php artisan db:seed
 
 **デモログイン**
 
-| 項目 | 値 |
-|------|-----|
-| メール | `demo@omoibloom.jp` |
-| パスワード | `password` |
+| 項目       | 値                    |
+| ---------- | --------------------- |
+| メール     | `demo@omoibouquet.jp` |
+| パスワード | `password`            |
 
 ### フロントエンド
 
@@ -133,14 +133,14 @@ APP_URL=http://localhost:8888/flower-ec/public
 
 ## 5. 開発用コマンド一覧
 
-| コマンド | 説明 |
-|----------|------|
-| `php artisan migrate` | テーブル作成 |
-| `php artisan migrate:fresh --seed` | DBリセット＋再シード |
-| `php artisan db:seed` | 花データ・デモユーザーの投入 |
-| `npm run dev` | Vite 開発サーバー（ホットリロード） |
-| `npm run build` | 本番用アセットビルド |
-| `php artisan serve` | PHP 内蔵サーバー（MAMP 不要の簡易確認用） |
+| コマンド                           | 説明                                      |
+| ---------------------------------- | ----------------------------------------- |
+| `php artisan migrate`              | テーブル作成                              |
+| `php artisan migrate:fresh --seed` | DBリセット＋再シード                      |
+| `php artisan db:seed`              | 花データ・デモユーザーの投入              |
+| `npm run dev`                      | Vite 開発サーバー（ホットリロード）       |
+| `npm run build`                    | 本番用アセットビルド                      |
+| `php artisan serve`                | PHP 内蔵サーバー（MAMP 不要の簡易確認用） |
 
 内蔵サーバーの例:
 
@@ -151,16 +151,16 @@ php artisan serve
 
 ## 6. 実装済み機能
 
-| 機能 | URL / 操作 |
-|------|------------|
-| トップ | `/` |
-| 花一覧 | `/flowers` |
-| 花詳細・花言葉 | `/flowers/{slug}` |
-| 花束ビルダー | `/bouquet/builder` |
-| カート | `/cart` |
-| ログイン / 会員登録 | `/login` `/register` |
-| 注文 | カート → ログイン → `/checkout` |
-| 注文履歴 | `/orders` |
+| 機能                | URL / 操作                      |
+| ------------------- | ------------------------------- |
+| トップ              | `/`                             |
+| 花一覧              | `/flowers`                      |
+| 花詳細・花言葉      | `/flowers/{slug}`               |
+| 花束ビルダー        | `/bouquet/builder`              |
+| カート              | `/cart`                         |
+| ログイン / 会員登録 | `/login` `/register`            |
+| 注文                | カート → ログイン → `/checkout` |
+| 注文履歴            | `/orders`                       |
 
 ## 7. 今後追加予定（未実装）
 

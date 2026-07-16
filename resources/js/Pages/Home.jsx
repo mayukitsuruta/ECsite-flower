@@ -58,7 +58,7 @@ export default function Home({ seasonalFlowers, shopFlowers }) {
                             />
                             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-stone-900/50 to-transparent pb-8 pt-24">
                                 <h1 className="text-center font-serif text-4xl font-bold tracking-wide text-white sm:text-5xl">
-                                    OmoiBloom
+                                    Omoibouquet
                                 </h1>
                             </div>
                         </div>
@@ -135,10 +135,7 @@ export default function Home({ seasonalFlowers, shopFlowers }) {
                                 {QUICK_CATEGORIES.map((cat) => (
                                     <Link
                                         key={cat.label}
-                                        href={route(
-                                            "flowers.index",
-                                            cat.href,
-                                        )}
+                                        href={route("flowers.index", cat.href)}
                                         className="inline-flex items-center gap-1 rounded-full border border-stone-200 bg-white px-3 py-1 text-xs text-stone-700 transition hover:border-bloom-300 hover:bg-bloom-50"
                                     >
                                         <span>{cat.emoji}</span>
@@ -215,10 +212,7 @@ export default function Home({ seasonalFlowers, shopFlowers }) {
                             {seasonalFlowers.slice(0, 5).map((flower) => (
                                 <Link
                                     key={flower.id}
-                                    href={route(
-                                        "flowers.show",
-                                        flower.slug,
-                                    )}
+                                    href={route("flowers.show", flower.slug)}
                                     className="group overflow-hidden rounded-lg border-2 border-sage-300 bg-sage-100 p-1 shadow-sm transition hover:shadow-md"
                                 >
                                     <div className="aspect-square overflow-hidden rounded-md bg-white">
@@ -494,10 +488,7 @@ function HomeCalendar() {
             </p>
             <div className="mt-4 grid grid-cols-7 gap-1 text-center text-xs">
                 {["日", "月", "火", "水", "木", "金", "土"].map((d) => (
-                    <span
-                        key={d}
-                        className="py-1 font-medium text-stone-400"
-                    >
+                    <span key={d} className="py-1 font-medium text-stone-400">
                         {d}
                     </span>
                 ))}

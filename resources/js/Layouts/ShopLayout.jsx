@@ -16,9 +16,7 @@ export default function ShopLayout({
           : "mx-auto max-w-6xl px-4 py-8 sm:px-6";
 
     return (
-        <div
-            className={`min-h-screen ${home ? "bg-cream" : "bg-white"}`}
-        >
+        <div className={`min-h-screen ${home ? "bg-cream" : "bg-white"}`}>
             <header
                 className={`sticky top-0 z-40 border-b ${
                     home
@@ -27,7 +25,10 @@ export default function ShopLayout({
                 }`}
             >
                 <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-                    <Link href={route("home")} className="group flex items-center gap-3">
+                    <Link
+                        href={route("home")}
+                        className="group flex items-center gap-3"
+                    >
                         {home && (
                             <span className="flex h-10 w-10 items-center justify-center rounded-full bg-bloom-600 text-lg text-white shadow-sm">
                                 🌸
@@ -44,7 +45,7 @@ export default function ShopLayout({
                                 {shop?.name ?? "想い束"}
                             </p>
                             <p className="hidden text-xs text-stone-400 sm:block">
-                                {home ? "OmoiBloom" : "flower shop"}
+                                {home ? "OmoiBouquet" : "flower shop"}
                             </p>
                         </div>
                     </Link>
