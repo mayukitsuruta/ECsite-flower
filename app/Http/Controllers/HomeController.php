@@ -11,14 +11,15 @@ class HomeController extends Controller
     public function index(): Response
     {
         return Inertia::render('Home', [
-            'seasonalFlowers' => Flower::active()
-                ->seasonal()
-                ->orderBy('name')
-                ->limit(6)
-                ->get(),
             'shopFlowers' => Flower::active()
-                ->orderBy('price')
-                ->limit(8)
+                ->where('category', 'bouquet')
+                ->where('is_seasonal', false)
+                ->orderBy('id')
+                ->get(),
+            'seasonalFlowers' => Flower::active()
+                ->where('category', 'bouquet')
+                ->seasonal()
+                ->orderBy('id')
                 ->get(),
         ]);
     }

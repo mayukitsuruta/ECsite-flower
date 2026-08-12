@@ -1,8 +1,5 @@
 import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import GuestLayout from '@/Layouts/GuestLayout';
+import ShopLayout from '@/Layouts/ShopLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 
 export default function Register() {
@@ -22,99 +19,117 @@ export default function Register() {
     };
 
     return (
-        <GuestLayout>
-            <Head title="Register" />
+        <ShopLayout hideTitle>
+            <Head title="新規会員登録" />
 
-            <form onSubmit={submit}>
-                <div>
-                    <InputLabel htmlFor="name" value="Name" />
-
-                    <TextInput
-                        id="name"
-                        name="name"
-                        value={data.name}
-                        className="mt-1 block w-full"
-                        autoComplete="name"
-                        isFocused={true}
-                        onChange={(e) => setData('name', e.target.value)}
-                        required
-                    />
-
-                    <InputError message={errors.name} className="mt-2" />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel htmlFor="email" value="Email" />
-
-                    <TextInput
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
-                        className="mt-1 block w-full"
-                        autoComplete="username"
-                        onChange={(e) => setData('email', e.target.value)}
-                        required
-                    />
-
-                    <InputError message={errors.email} className="mt-2" />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
-
-                    <TextInput
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        autoComplete="new-password"
-                        onChange={(e) => setData('password', e.target.value)}
-                        required
-                    />
-
-                    <InputError message={errors.password} className="mt-2" />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel
-                        htmlFor="password_confirmation"
-                        value="Confirm Password"
-                    />
-
-                    <TextInput
-                        id="password_confirmation"
-                        type="password"
-                        name="password_confirmation"
-                        value={data.password_confirmation}
-                        className="mt-1 block w-full"
-                        autoComplete="new-password"
-                        onChange={(e) =>
-                            setData('password_confirmation', e.target.value)
-                        }
-                        required
-                    />
-
-                    <InputError
-                        message={errors.password_confirmation}
-                        className="mt-2"
-                    />
-                </div>
-
-                <div className="mt-4 flex items-center justify-end">
+            <div className="mx-auto max-w-md">
+                <div className="flex items-center justify-between border-b border-stone-300 pb-4">
+                    <h1 className="text-lg text-stone-900">新規会員登録</h1>
                     <Link
-                        href={route('login')}
-                        className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        href={route('checkout.start')}
+                        className="flex h-8 w-8 items-center justify-center text-2xl leading-none text-stone-500 hover:text-stone-800"
+                        aria-label="戻る"
                     >
-                        Already registered?
+                        ×
                     </Link>
-
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Register
-                    </PrimaryButton>
                 </div>
-            </form>
-        </GuestLayout>
+
+                <form onSubmit={submit} className="mt-10 space-y-5">
+                    <div>
+                        <label htmlFor="name" className="block text-sm text-stone-700">
+                            お名前
+                        </label>
+                        <input
+                            id="name"
+                            type="text"
+                            name="name"
+                            value={data.name}
+                            autoComplete="name"
+                            autoFocus
+                            onChange={(e) => setData('name', e.target.value)}
+                            className="mt-1 w-full rounded-lg border-stone-200 focus:border-bloom-500 focus:ring-bloom-500"
+                            required
+                        />
+                        <InputError message={errors.name} className="mt-2" />
+                    </div>
+
+                    <div>
+                        <label htmlFor="email" className="block text-sm text-stone-700">
+                            メールアドレス
+                        </label>
+                        <input
+                            id="email"
+                            type="email"
+                            name="email"
+                            value={data.email}
+                            autoComplete="username"
+                            onChange={(e) => setData('email', e.target.value)}
+                            className="mt-1 w-full rounded-lg border-stone-200 focus:border-bloom-500 focus:ring-bloom-500"
+                            required
+                        />
+                        <InputError message={errors.email} className="mt-2" />
+                    </div>
+
+                    <div>
+                        <label htmlFor="password" className="block text-sm text-stone-700">
+                            パスワード
+                        </label>
+                        <input
+                            id="password"
+                            type="password"
+                            name="password"
+                            value={data.password}
+                            autoComplete="new-password"
+                            onChange={(e) => setData('password', e.target.value)}
+                            className="mt-1 w-full rounded-lg border-stone-200 focus:border-bloom-500 focus:ring-bloom-500"
+                            required
+                        />
+                        <InputError message={errors.password} className="mt-2" />
+                    </div>
+
+                    <div>
+                        <label
+                            htmlFor="password_confirmation"
+                            className="block text-sm text-stone-700"
+                        >
+                            パスワード（確認）
+                        </label>
+                        <input
+                            id="password_confirmation"
+                            type="password"
+                            name="password_confirmation"
+                            value={data.password_confirmation}
+                            autoComplete="new-password"
+                            onChange={(e) =>
+                                setData('password_confirmation', e.target.value)
+                            }
+                            className="mt-1 w-full rounded-lg border-stone-200 focus:border-bloom-500 focus:ring-bloom-500"
+                            required
+                        />
+                        <InputError
+                            message={errors.password_confirmation}
+                            className="mt-2"
+                        />
+                    </div>
+
+                    <button
+                        type="submit"
+                        disabled={processing}
+                        className="flex w-full items-center justify-center rounded-full bg-bloom-500 px-6 py-3.5 text-sm font-medium text-white shadow-sm transition hover:bg-bloom-600 disabled:opacity-50"
+                    >
+                        新規会員登録して購入手続き
+                    </button>
+
+                    <div className="pt-2 text-center text-sm">
+                        <Link
+                            href={route('login', { to: 'checkout' })}
+                            className="text-bloom-600 underline hover:text-bloom-700"
+                        >
+                            すでに会員の方はこちら
+                        </Link>
+                    </div>
+                </form>
+            </div>
+        </ShopLayout>
     );
 }

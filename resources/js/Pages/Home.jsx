@@ -1,12 +1,17 @@
 import FlowerCard from "@/Components/FlowerCard";
 import ShopLayout from "@/Layouts/ShopLayout";
-import { Head, Link, router } from "@inertiajs/react";
-import { useState } from "react";
+import { Head, Link } from "@inertiajs/react";
 
-const HERO_IMAGE =
-    "https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=1200&q=80";
+const HERO_IMAGE = "/images/tenpogaikan.jpg";
 const SHOP_INTERIOR =
     "https://images.unsplash.com/photo-1563241522-8f783137d9f2?w=800&q=80";
+
+const IMG = {
+    hana1: "/images/hana1.png",
+    hana2: "/images/hana2.png",
+    hana3: "/images/hana3.png",
+    hana4: "/images/hana4.png",
+};
 
 const NEWS_ITEMS = [
     {
@@ -23,57 +28,51 @@ const NEWS_ITEMS = [
     },
 ];
 
-const QUICK_CATEGORIES = [
-    { label: "バラ", href: { category: "rose" }, emoji: "🌹" },
-    { label: "チューリップ", href: { category: "tulip" }, emoji: "🌷" },
-    { label: "季節の花", href: { seasonal: 1 }, emoji: "🌸" },
-    { label: "ピンク", href: { color: "ピンク" }, emoji: "💗" },
-    { label: "すべて", href: {}, emoji: "🌿" },
-];
-
 export default function Home({ seasonalFlowers, shopFlowers }) {
-    const [searchQuery, setSearchQuery] = useState("");
-
-    const handleSearch = (e) => {
-        e.preventDefault();
-        router.get(
-            route("flowers.index"),
-            searchQuery.trim() ? { search: searchQuery.trim() } : {},
-        );
-    };
-
     return (
         <ShopLayout home>
             <Head title="トップ" />
 
             {/* Hero */}
             <section className="relative bg-cream px-4 pb-16 pt-6 sm:px-6 lg:px-8">
-                <div className="mx-auto max-w-4xl">
-                    <div className="relative mx-auto max-w-md sm:max-w-lg">
-                        <div className="arch-image relative mx-auto aspect-[3/4] max-h-[520px] overflow-hidden shadow-xl">
+                <div className="mx-auto max-w-5xl">
+                    <div className="relative mx-auto max-w-4xl">
+                        <div className="arch-image relative mx-auto aspect-[16/10] w-full overflow-hidden shadow-xl sm:aspect-[2/1]">
                             <img
                                 src={HERO_IMAGE}
-                                alt="想い束 花屋"
-                                className="h-full w-full object-cover"
+                                alt="想い束 店舗外観"
+                                className="h-full w-full object-cover object-center"
                             />
-                            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-stone-900/50 to-transparent pb-8 pt-24">
-                                <h1 className="text-center font-serif text-4xl font-bold tracking-wide text-white sm:text-5xl">
+                            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-stone-900/55 to-transparent pb-6 pt-16 sm:pb-8 sm:pt-20">
+                                <h1 className="text-center font-serif text-3xl font-bold tracking-wide text-white sm:text-5xl">
                                     Omoibouquet
                                 </h1>
                             </div>
                         </div>
-                        <span className="pointer-events-none absolute -left-4 top-12 text-3xl sm:-left-8 sm:text-4xl">
-                            🌸
-                        </span>
-                        <span className="pointer-events-none absolute -right-2 top-24 text-2xl sm:-right-6 sm:text-3xl">
-                            🌷
-                        </span>
-                        <span className="pointer-events-none absolute -bottom-2 left-8 text-2xl sm:text-3xl">
-                            💐
-                        </span>
-                        <span className="pointer-events-none absolute -bottom-4 right-12 text-3xl sm:text-4xl">
-                            🌼
-                        </span>
+                        <img
+                            src={IMG.hana1}
+                            alt=""
+                            aria-hidden
+                            className="pointer-events-none absolute -left-10 top-6 h-20 w-20 object-contain sm:-left-20 sm:top-8 sm:h-32 sm:w-32 lg:-left-28 lg:h-40 lg:w-40"
+                        />
+                        <img
+                            src={IMG.hana2}
+                            alt=""
+                            aria-hidden
+                            className="pointer-events-none absolute -right-8 top-10 h-16 w-16 object-contain sm:-right-20 sm:h-28 sm:w-28 lg:-right-28 lg:h-36 lg:w-36"
+                        />
+                        <img
+                            src={IMG.hana3}
+                            alt=""
+                            aria-hidden
+                            className="pointer-events-none absolute -bottom-4 -left-6 h-16 w-16 object-contain sm:-bottom-6 sm:-left-16 sm:h-28 sm:w-28 lg:-left-24 lg:h-36 lg:w-36"
+                        />
+                        <img
+                            src={IMG.hana4}
+                            alt=""
+                            aria-hidden
+                            className="pointer-events-none absolute -bottom-6 -right-4 h-20 w-20 object-contain sm:-bottom-8 sm:-right-14 sm:h-32 sm:w-32 lg:-right-24 lg:h-40 lg:w-40"
+                        />
                     </div>
 
                     <p className="mx-auto mt-10 max-w-xl text-center text-sm leading-relaxed text-stone-600 sm:text-base">
@@ -84,162 +83,59 @@ export default function Home({ seasonalFlowers, shopFlowers }) {
                 </div>
             </section>
 
-            {/* Primary CTAs — 花検索 & 花束カスタマイズ */}
+            {/* 花束カスタマイズ — 一面で目立たせる */}
             <section className="bg-white px-4 py-14 sm:px-6 lg:px-8">
                 <div className="mx-auto max-w-5xl">
-                    <p className="mb-8 text-center text-xs font-semibold uppercase tracking-[0.3em] text-bloom-600">
-                        Start Here
-                    </p>
-                    <div className="grid gap-6 md:grid-cols-2">
-                        {/* 花を探す */}
-                        <div className="home-action-card group border-bloom-200 bg-gradient-to-br from-bloom-50 to-white">
-                            <div className="flex items-start gap-4">
-                                <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-bloom-600 text-2xl text-white shadow-md">
-                                    🔍
-                                </span>
-                                <div className="flex-1">
-                                    <p className="text-xs font-semibold uppercase tracking-wider text-bloom-500">
-                                        Flower Search
-                                    </p>
-                                    <h2 className="mt-1 font-serif text-2xl text-stone-900">
-                                        花を探す
-                                    </h2>
-                                    <p className="mt-2 text-sm leading-relaxed text-stone-600">
-                                        花名・花言葉・色・カテゴリから、
-                                        贈りたい想いに合う花を見つけられます。
-                                    </p>
-                                </div>
-                            </div>
+                    <Link
+                        href={route("bouquet.builder")}
+                        className="group relative block overflow-hidden rounded-3xl bg-gradient-to-br from-bloom-600 via-bloom-700 to-bloom-900 px-8 py-14 text-white shadow-xl transition hover:shadow-2xl sm:px-14 sm:py-20"
+                    >
+                        <div className="pointer-events-none absolute -right-8 -top-8 h-40 w-40 rounded-full bg-white/10 blur-2xl sm:h-56 sm:w-56" />
+                        <div className="pointer-events-none absolute -bottom-12 -left-8 h-48 w-48 rounded-full bg-bloom-400/20 blur-3xl" />
 
-                            <form onSubmit={handleSearch} className="mt-6">
-                                <div className="flex gap-2">
-                                    <input
-                                        type="search"
-                                        value={searchQuery}
-                                        onChange={(e) =>
-                                            setSearchQuery(e.target.value)
-                                        }
-                                        placeholder="花の名前や花言葉で検索…"
-                                        className="flex-1 rounded-full border-stone-300 bg-white px-4 py-2.5 text-sm shadow-sm focus:border-bloom-400 focus:ring-bloom-400"
-                                    />
-                                    <button
-                                        type="submit"
-                                        className="btn-primary shrink-0 px-5"
-                                    >
-                                        検索
-                                    </button>
-                                </div>
-                            </form>
+                        <div className="relative z-10 mx-auto max-w-2xl text-center">
+                            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-white/75">
+                                Start Here · Bouquet Builder
+                            </p>
+                            <h2 className="mt-4 font-serif text-3xl font-bold leading-tight sm:text-5xl">
+                                花束をカスタマイズ
+                            </h2>
+                            <p className="mx-auto mt-5 max-w-lg text-sm leading-relaxed text-white/90 sm:text-base">
+                                好きな花を一本ずつ選んで、色合いや本数も自由に。
+                                おまかせではなく、あなただけの一点もの花束を作れます。
+                            </p>
 
-                            <div className="mt-4 flex flex-wrap gap-2">
-                                {QUICK_CATEGORIES.map((cat) => (
-                                    <Link
-                                        key={cat.label}
-                                        href={route("flowers.index", cat.href)}
-                                        className="inline-flex items-center gap-1 rounded-full border border-stone-200 bg-white px-3 py-1 text-xs text-stone-700 transition hover:border-bloom-300 hover:bg-bloom-50"
-                                    >
-                                        <span>{cat.emoji}</span>
-                                        {cat.label}
-                                    </Link>
-                                ))}
-                            </div>
-
-                            <Link
-                                href={route("flowers.index")}
-                                className="mt-6 inline-flex items-center gap-1 text-sm font-medium text-bloom-700 transition group-hover:gap-2"
-                            >
-                                すべての花を見る
-                                <span aria-hidden>→</span>
-                            </Link>
-                        </div>
-
-                        {/* 花束をカスタマイズ */}
-                        <Link
-                            href={route("bouquet.builder")}
-                            className="home-action-card home-action-card-accent group block"
-                        >
-                            <div className="flex items-start gap-4">
-                                <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/20 text-2xl backdrop-blur-sm">
-                                    💐
-                                </span>
-                                <div className="flex-1">
-                                    <p className="text-xs font-semibold uppercase tracking-wider text-white/80">
-                                        Bouquet Builder
-                                    </p>
-                                    <h2 className="mt-1 font-serif text-2xl text-white">
-                                        花束をカスタマイズ
-                                    </h2>
-                                    <p className="mt-2 text-sm leading-relaxed text-white/90">
-                                        好きな花を一本ずつ選んで、
-                                        色合いや本数も自由に組み合わせ。
-                                        世界にひとつだけの花束を作れます。
-                                    </p>
-                                </div>
-                            </div>
-
-                            <ul className="mt-6 space-y-2 text-sm text-white/90">
-                                <li className="flex items-center gap-2">
-                                    <span className="text-white/60">①</span>
-                                    色で絞り込んで花を選ぶ
+                            <ul className="mx-auto mt-8 flex max-w-xl flex-col gap-3 text-left text-sm text-white/90 sm:flex-row sm:justify-center sm:gap-8 sm:text-center">
+                                <li>
+                                    <span className="block text-xs text-white/55">
+                                        STEP 1
+                                    </span>
+                                    お好みの花を組み合わせる
                                 </li>
-                                <li className="flex items-center gap-2">
-                                    <span className="text-white/60">②</span>
-                                    本数を調整してプレビュー
+                                <li>
+                                    <span className="block text-xs text-white/55">
+                                        STEP 2
+                                    </span>
+                                    ラッピングやメッセージカードを選ぶ
                                 </li>
-                                <li className="flex items-center gap-2">
-                                    <span className="text-white/60">③</span>
-                                    カートに入れて店舗受け取り
+                                <li>
+                                    <span className="block text-xs text-white/55">
+                                        STEP 3
+                                    </span>
+                                    カートに入れて購入
                                 </li>
                             </ul>
 
-                            <span className="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-6 py-2.5 text-sm font-semibold text-bloom-700 shadow-md transition group-hover:gap-3">
+                            <span className="mt-10 inline-flex items-center gap-2 rounded-full bg-white px-8 py-3.5 text-sm font-semibold text-bloom-700 shadow-lg transition group-hover:gap-3 group-hover:bg-bloom-50">
                                 花束を作り始める
                                 <span aria-hidden>→</span>
                             </span>
-                        </Link>
-                    </div>
+                        </div>
+                    </Link>
                 </div>
             </section>
 
-            {/* Seasonal quick picks */}
-            {seasonalFlowers.length > 0 && (
-                <section className="bg-cream px-4 py-10 sm:px-6 lg:px-8">
-                    <div className="mx-auto max-w-5xl">
-                        <h2 className="text-center font-serif text-lg text-stone-800">
-                            今の季節におすすめ
-                        </h2>
-                        <div className="mt-6 grid grid-cols-3 gap-3 sm:grid-cols-5 sm:gap-4">
-                            {seasonalFlowers.slice(0, 5).map((flower) => (
-                                <Link
-                                    key={flower.id}
-                                    href={route("flowers.show", flower.slug)}
-                                    className="group overflow-hidden rounded-lg border-2 border-sage-300 bg-sage-100 p-1 shadow-sm transition hover:shadow-md"
-                                >
-                                    <div className="aspect-square overflow-hidden rounded-md bg-white">
-                                        {flower.image ? (
-                                            <img
-                                                src={flower.image}
-                                                alt={flower.name}
-                                                className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
-                                                loading="lazy"
-                                            />
-                                        ) : (
-                                            <div className="flex h-full items-center justify-center text-3xl">
-                                                🌸
-                                            </div>
-                                        )}
-                                    </div>
-                                    <p className="mt-1.5 truncate text-center text-[10px] font-medium text-stone-700 sm:text-xs">
-                                        {flower.name}
-                                    </p>
-                                </Link>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-            )}
-
-            {/* Shop grid */}
+            {/* Shop grid — 人気の花 */}
             <section className="bg-white px-4 py-16 sm:px-6 lg:px-8">
                 <div className="mx-auto max-w-6xl">
                     <div className="mb-10 flex items-end justify-between">
@@ -258,13 +154,42 @@ export default function Home({ seasonalFlowers, shopFlowers }) {
                             View More →
                         </Link>
                     </div>
-                    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                    <div className="grid grid-cols-2 items-stretch gap-6 lg:grid-cols-3">
                         {shopFlowers.map((flower) => (
                             <FlowerCard key={flower.id} flower={flower} />
                         ))}
                     </div>
                 </div>
             </section>
+
+            {/* 季節のおすすめ */}
+            {seasonalFlowers.length > 0 && (
+                <section className="bg-cream px-4 py-16 sm:px-6 lg:px-8">
+                    <div className="mx-auto max-w-6xl">
+                        <div className="mb-10 flex items-end justify-between">
+                            <div>
+                                <p className="text-xs font-semibold uppercase tracking-widest text-stone-400">
+                                    Seasonal
+                                </p>
+                                <h2 className="mt-1 font-serif text-2xl text-stone-900">
+                                    季節のおすすめ
+                                </h2>
+                            </div>
+                            <Link
+                                href={route("flowers.index", { seasonal: 1 })}
+                                className="text-sm text-bloom-600 hover:underline"
+                            >
+                                View More →
+                            </Link>
+                        </div>
+                        <div className="grid grid-cols-2 items-stretch gap-6 lg:grid-cols-3">
+                            {seasonalFlowers.map((flower) => (
+                                <FlowerCard key={flower.id} flower={flower} />
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            )}
 
             {/* News */}
             <section className="bg-cream px-4 py-16 sm:px-6 lg:px-8">
@@ -315,7 +240,12 @@ export default function Home({ seasonalFlowers, shopFlowers }) {
                         <p className="font-serif text-5xl font-bold leading-none tracking-tight text-stone-900 [writing-mode:vertical-rl] md:text-6xl">
                             Calendar
                         </p>
-                        <span className="mt-4 text-4xl">💐</span>
+                        <img
+                            src={IMG.hana1}
+                            alt=""
+                            aria-hidden
+                            className="mt-4 h-14 w-14 object-contain"
+                        />
                         <p className="mt-6 max-w-xs text-center text-sm text-stone-500 md:text-right">
                             店舗の営業日・イベント情報を
                             カレンダーでご確認ください。
@@ -446,18 +376,16 @@ export default function Home({ seasonalFlowers, shopFlowers }) {
                 </div>
 
                 {/* Footer flower row */}
-                <div className="mx-auto mt-16 flex max-w-4xl justify-center gap-4 text-4xl sm:gap-8 sm:text-5xl">
-                    {["🌷", "🌼", "🌸", "🌻", "🌺", "💐", "🌹", "🪻"].map(
-                        (emoji, i) => (
-                            <span
+                <div className="mx-auto mt-16 flex max-w-5xl items-center justify-center gap-4 overflow-hidden sm:gap-8">
+                    {[IMG.hana1, IMG.hana2, IMG.hana3, IMG.hana4].map(
+                        (src, i) => (
+                            <img
                                 key={i}
-                                className="transition hover:scale-110"
-                                style={{
-                                    transform: `rotate(${(i % 2 === 0 ? -1 : 1) * (5 + i * 3)}deg)`,
-                                }}
-                            >
-                                {emoji}
-                            </span>
+                                src={src}
+                                alt=""
+                                aria-hidden
+                                className="h-14 w-auto object-contain sm:h-20"
+                            />
                         ),
                     )}
                 </div>

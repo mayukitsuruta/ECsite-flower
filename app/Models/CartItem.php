@@ -40,12 +40,36 @@ class CartItem extends Model
         return $this->unit_price * $this->quantity;
     }
 
+    public function isMessageCard(): bool
+    {
+        return $this->item_type === 'message_card'
+            || ($this->bouquet_name === 'メッセージカード' && (int) $this->unit_price === 0);
+    }
+
     public function displayName(): string
     {
+        if ($this->isMessageCard()) {
+            return 'メッセージカード';
+        }
+
         if ($this->item_type === 'bouquet') {
             return $this->bouquet_name ?? 'オリジナル花束';
         }
 
         return $this->flower?->name ?? '花';
+    }
+
+    public function messageTexts(): array
+    {
+        if (! $this->isMessageCard()) {
+            return [];
+        }
+
+        $items = $this->bouquet_items ?? [];
+
+        return array_map(
+            fn ($row) => is_array($row) ? (string) ($row['text'] ?? '') : (string) $row,
+            $items
+        );
     }
 }

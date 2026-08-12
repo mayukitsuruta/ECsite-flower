@@ -62,6 +62,53 @@ class CartService
         ]);
     }
 
+    public function addMessageCard(string $message = ''): void
+    {
+        $existing = $this->items()->first(fn (CartItem $item) => $item->isMessageCard());
+
+        $text = trim($message);
+
+        if ($existing) {
+            $messages = $existing->messageTexts();
+            $messages[] = $text;
+            $existing->update([
+                'quantity' => count($messages),
+                'bouquet_items' => array_map(fn ($t) => ['text' => $t], $messages),
+            ]);
+
+            return;
+        }
+
+        CartItem::create([
+            'user_id' => $this->request->user()?->id,
+            'session_id' => $this->request->user() ? null : $this->sessionId(),
+            'item_type' => 'bouquet',
+            'bouquet_name' => 'メッセージカード',
+            'bouquet_items' => [['text' => $text]],
+            'quantity' => 1,
+            'unit_price' => 0,
+        ]);
+    }
+
+    public function updateMessageTexts(CartItem $item, array $texts): void
+    {
+        $normalized = array_values(array_map(
+            fn ($text) => ['text' => trim((string) $text)],
+            $texts
+        ));
+
+        if ($normalized === []) {
+            $item->delete();
+
+            return;
+        }
+
+        $item->update([
+            'quantity' => count($normalized),
+            'bouquet_items' => $normalized,
+        ]);
+    }
+
     public function addBouquet(string $name, array $composition, int $wrappingFee = 500): void
     {
         $total = $wrappingFee;
@@ -95,6 +142,23 @@ class CartService
     {
         if ($quantity < 1) {
             $item->delete();
+
+            return;
+        }
+
+        if ($item->isMessageCard()) {
+            $messages = $item->messageTexts();
+
+            if ($quantity > count($messages)) {
+                $messages = array_pad($messages, $quantity, '');
+            } else {
+                $messages = array_slice($messages, 0, $quantity);
+            }
+
+            $item->update([
+                'quantity' => $quantity,
+                'bouquet_items' => array_map(fn ($t) => ['text' => $t], $messages),
+            ]);
 
             return;
         }

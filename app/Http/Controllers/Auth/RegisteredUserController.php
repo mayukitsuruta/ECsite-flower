@@ -20,8 +20,12 @@ class RegisteredUserController extends Controller
     /**
      * Display the registration view.
      */
-    public function create(): Response
+    public function create(Request $request): Response
     {
+        if ($request->query('to') === 'checkout') {
+            $request->session()->put('url.intended', route('checkout.index'));
+        }
+
         return Inertia::render('Auth/Register');
     }
 
@@ -50,6 +54,6 @@ class RegisteredUserController extends Controller
 
         $cart->mergeGuestCart($user->id);
 
-        return redirect(route('home', absolute: false));
+        return redirect()->intended(route('home', absolute: false));
     }
 }

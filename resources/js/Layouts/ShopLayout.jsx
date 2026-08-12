@@ -1,5 +1,6 @@
 import FlashMessage from "@/Components/FlashMessage";
-import { Link, usePage } from "@inertiajs/react";
+import { Link, router, usePage } from "@inertiajs/react";
+import { useState } from "react";
 
 export default function ShopLayout({
     children,
@@ -9,11 +10,20 @@ export default function ShopLayout({
     home = false,
 }) {
     const { auth, cartCount, shop } = usePage().props;
+    const [searchQuery, setSearchQuery] = useState("");
     const mainClass = home
         ? ""
         : wide
           ? "mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8"
           : "mx-auto max-w-6xl px-4 py-8 sm:px-6";
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        router.get(
+            route("flowers.index"),
+            searchQuery.trim() ? { search: searchQuery.trim() } : {},
+        );
+    };
 
     return (
         <div className={`min-h-screen ${home ? "bg-cream" : "bg-white"}`}>
@@ -24,10 +34,10 @@ export default function ShopLayout({
                         : "border-stone-200 bg-white/95 backdrop-blur"
                 }`}
             >
-                <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+                <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
                     <Link
                         href={route("home")}
-                        className="group flex items-center gap-3"
+                        className="group flex shrink-0 items-center gap-3"
                     >
                         {home && (
                             <span className="flex h-10 w-10 items-center justify-center rounded-full bg-bloom-600 text-lg text-white shadow-sm">
@@ -35,22 +45,35 @@ export default function ShopLayout({
                             </span>
                         )}
                         <div>
-                            <p
-                                className={`font-serif tracking-wide group-hover:text-bloom-700 ${
-                                    home
-                                        ? "text-xl text-stone-900"
-                                        : "text-xl text-stone-900"
-                                }`}
-                            >
+                            <p className="font-serif text-xl tracking-wide text-stone-900 group-hover:text-bloom-700">
                                 {shop?.name ?? "想い束"}
                             </p>
                             <p className="hidden text-xs text-stone-400 sm:block">
-                                {home ? "OmoiBouquet" : "flower shop"}
+                                {home ? "flower shop" : "flower shop"}
                             </p>
                         </div>
                     </Link>
 
-                    <nav className="flex items-center gap-1 text-sm sm:gap-3">
+                    <form
+                        onSubmit={handleSearch}
+                        className="order-last flex w-full min-w-0 flex-1 items-center gap-2 sm:order-none sm:mx-4 sm:max-w-md lg:max-w-lg"
+                    >
+                        <input
+                            type="search"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="花の名前・花言葉で検索…"
+                            className="w-full rounded-full border-stone-300 bg-white px-4 py-2 text-sm shadow-sm focus:border-bloom-400 focus:ring-bloom-400"
+                        />
+                        <button
+                            type="submit"
+                            className="shrink-0 rounded-full bg-bloom-600 px-4 py-2 text-xs font-medium text-white transition hover:bg-bloom-700 sm:text-sm"
+                        >
+                            細かく検索
+                        </button>
+                    </form>
+
+                    <nav className="flex shrink-0 items-center gap-1 text-sm sm:gap-3">
                         <NavLink href={route("flowers.index")} home={home}>
                             Shop
                         </NavLink>
@@ -63,21 +86,16 @@ export default function ShopLayout({
                         </NavLink>
                         <Link
                             href={route("cart.index")}
-                            className={`relative rounded-full px-4 py-1.5 text-sm font-medium transition ${
-                                home
-                                    ? "bg-bloom-600 text-white hover:bg-bloom-700"
-                                    : "text-stone-700 hover:text-stone-900"
-                            }`}
+                            aria-label={`カート${cartCount > 0 ? `（${cartCount}点）` : ""}`}
+                            className="relative flex items-center justify-center rounded-full p-1.5 transition hover:bg-bloom-50"
                         >
-                            カート
+                            <img
+                                src="/images/cart.png"
+                                alt=""
+                                className="h-8 w-8 object-contain sm:h-9 sm:w-9"
+                            />
                             {cartCount > 0 && (
-                                <span
-                                    className={`absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full text-xs ${
-                                        home
-                                            ? "bg-white text-bloom-700"
-                                            : "bg-bloom-600 text-white"
-                                    }`}
-                                >
+                                <span className="absolute -right-0.5 -top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-bloom-600 text-xs font-medium text-white">
                                     {cartCount}
                                 </span>
                             )}

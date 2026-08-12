@@ -14,8 +14,12 @@ use Inertia\Response;
 
 class AuthenticatedSessionController extends Controller
 {
-    public function create(): Response
+    public function create(Request $request): Response
     {
+        if ($request->query('to') === 'checkout') {
+            $request->session()->put('url.intended', route('checkout.index'));
+        }
+
         return Inertia::render('Auth/Login', [
             'canResetPassword' => Route::has('password.request'),
             'status' => session('status'),

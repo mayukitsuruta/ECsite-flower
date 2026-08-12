@@ -2,7 +2,7 @@ import ShopLayout from '@/Layouts/ShopLayout';
 import { formatYen } from '@/Utils/format';
 import { Head, useForm, usePage } from '@inertiajs/react';
 
-export default function CheckoutIndex({ items, subtotal, stores }) {
+export default function CheckoutIndex({ items, subtotal, stores, messageFromCart }) {
     const { auth } = usePage().props;
 
     const form = useForm({
@@ -12,7 +12,7 @@ export default function CheckoutIndex({ items, subtotal, stores }) {
         recipient_name: auth.user?.name ?? '',
         recipient_phone: '',
         delivery_address: '',
-        message_card: '',
+        message_card: messageFromCart ?? '',
         notes: '',
     });
 

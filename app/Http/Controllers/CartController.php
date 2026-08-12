@@ -17,7 +17,7 @@ class CartController extends Controller
         $items = $cart->items()->map(function (CartItem $item) {
             return [
                 'id' => $item->id,
-                'item_type' => $item->item_type,
+                'item_type' => $item->isMessageCard() ? 'message_card' : $item->item_type,
                 'display_name' => $item->displayName(),
                 'quantity' => $item->quantity,
                 'unit_price' => $item->unit_price,
@@ -25,6 +25,7 @@ class CartController extends Controller
                 'flower' => $item->flower,
                 'bouquet_name' => $item->bouquet_name,
                 'bouquet_items' => $item->bouquet_items,
+                'message_texts' => $item->messageTexts(),
             ];
         });
 
@@ -36,6 +37,16 @@ class CartController extends Controller
 
     public function store(Request $request, CartService $cart): RedirectResponse
     {
+        if ($request->input('item_type') === 'message_card') {
+            $validated = $request->validate([
+                'message' => ['nullable', 'string', 'max:200'],
+            ]);
+
+            $cart->addMessageCard($validated['message'] ?? '');
+
+            return redirect()->route('cart.index')->with('success', 'メッセージカードをカートに追加しました。');
+        }
+
         $validated = $request->validate([
             'flower_id' => ['required', 'exists:flowers,id'],
             'quantity' => ['integer', 'min:1', 'max:99'],
@@ -50,6 +61,19 @@ class CartController extends Controller
     public function update(Request $request, CartItem $cartItem, CartService $cart): RedirectResponse
     {
         $this->authorizeCartItem($cartItem, $cart);
+
+        if ($request->has('message_texts')) {
+            abort_unless($cartItem->isMessageCard(), 403);
+
+            $validated = $request->validate([
+                'message_texts' => ['required', 'array', 'min:1', 'max:20'],
+                'message_texts.*' => ['nullable', 'string', 'max:200'],
+            ]);
+
+            $cart->updateMessageTexts($cartItem, $validated['message_texts']);
+
+            return back()->with('success', 'メッセージを更新しました。');
+        }
 
         $validated = $request->validate([
             'quantity' => ['required', 'integer', 'min:0', 'max:99'],

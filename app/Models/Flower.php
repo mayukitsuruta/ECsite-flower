@@ -68,6 +68,7 @@ class Flower extends Model
             'sunflower' => 'ひまわり',
             'filler' => 'かすみ草・小花',
             'seasonal' => '季節の花',
+            'bouquet' => 'ブーケ',
             'other' => 'その他',
         ];
     }

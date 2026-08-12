@@ -4,15 +4,27 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\User;
 use App\Services\CartService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class CheckoutController extends Controller
 {
+    public function start(CartService $cart): Response|RedirectResponse
+    {
+        if ($cart->items()->isEmpty()) {
+            return redirect()->route('cart.index')->with('error', 'カートが空です。');
+        }
+
+        return Inertia::render('Checkout/Start');
+    }
+
     public function index(CartService $cart): Response|RedirectResponse
     {
         if ($cart->items()->isEmpty()) {
@@ -23,11 +35,19 @@ class CheckoutController extends Controller
             'id' => $item->id,
             'display_name' => $item->displayName(),
             'line_total' => $item->lineTotal(),
+            'item_type' => $item->isMessageCard() ? 'message_card' : $item->item_type,
         ]);
+
+        $messageFromCart = $cart->items()
+            ->filter(fn ($item) => $item->isMessageCard())
+            ->flatMap(fn ($item) => $item->messageTexts())
+            ->filter()
+            ->implode("\n\n");
 
         return Inertia::render('Checkout/Index', [
             'items' => $items,
             'subtotal' => $cart->subtotal(),
+            'messageFromCart' => $messageFromCart,
             'stores' => [
                 'omoi-shibuya' => '想い束 渋谷店（東京都渋谷区神南1-1-1）',
                 'omoi-nakameguro' => '想い束 中目黒店（東京都目黒区上目黑2-2-2）',
@@ -48,7 +68,7 @@ class CheckoutController extends Controller
             'recipient_name' => ['required', 'string', 'max:100'],
             'recipient_phone' => ['required', 'string', 'max:20'],
             'delivery_address' => ['required_if:fulfillment_type,delivery', 'nullable', 'string', 'max:500'],
-            'message_card' => ['nullable', 'string', 'max:200'],
+            'message_card' => ['nullable', 'string', 'max:2000'],
             'notes' => ['nullable', 'string', 'max:500'],
         ]);
 
@@ -57,8 +77,20 @@ class CheckoutController extends Controller
         $total = $subtotal + $deliveryFee;
 
         $order = DB::transaction(function () use ($request, $cart, $validated, $subtotal, $total) {
+            $user = $request->user();
+
+            if (! $user) {
+                $user = User::create([
+                    'name' => $validated['recipient_name'],
+                    'email' => 'guest-'.str()->uuid().'@guest.omoibouquet.jp',
+                    'password' => Hash::make(str()->random(32)),
+                ]);
+                Auth::login($user);
+                $cart->mergeGuestCart($user->id);
+            }
+
             $order = Order::create([
-                'user_id' => $request->user()->id,
+                'user_id' => $user->id,
                 'order_number' => 'OM-'.now()->format('Ymd').'-'.strtoupper(str()->random(6)),
                 'status' => 'pending',
                 'subtotal' => $subtotal,
@@ -69,7 +101,12 @@ class CheckoutController extends Controller
                 'recipient_name' => $validated['recipient_name'],
                 'recipient_phone' => $validated['recipient_phone'],
                 'delivery_address' => $validated['delivery_address'] ?? null,
-                'message_card' => $validated['message_card'] ?? null,
+                'message_card' => $validated['message_card']
+                    ?: ($cart->items()
+                        ->filter(fn ($item) => $item->isMessageCard())
+                        ->flatMap(fn ($item) => $item->messageTexts())
+                        ->filter()
+                        ->implode("\n\n") ?: null),
                 'notes' => $validated['notes'] ?? null,
             ]);
 

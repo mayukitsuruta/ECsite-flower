@@ -28,11 +28,20 @@ export default function OrdersShow({ order, statusLabels }) {
                         {order.items.map((item) => (
                             <li key={item.id} className="border-b border-bloom-50 pb-3 last:border-0">
                                 <p className="font-medium">{item.name}</p>
-                                {item.bouquet_items && (
+                                {item.bouquet_items && item.item_type === 'bouquet' && item.name !== 'メッセージカード' && (
                                     <ul className="mt-1 text-sm text-stone-600">
                                         {item.bouquet_items.map((bi, i) => (
                                             <li key={i}>
                                                 {bi.name} × {bi.quantity}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                                {(item.item_type === 'message_card' || item.name === 'メッセージカード') && item.bouquet_items && (
+                                    <ul className="mt-1 space-y-1 text-sm text-stone-600">
+                                        {item.bouquet_items.map((bi, i) => (
+                                            <li key={i} className="whitespace-pre-wrap">
+                                                {bi.text || '（メッセージ未入力）'}
                                             </li>
                                         ))}
                                     </ul>

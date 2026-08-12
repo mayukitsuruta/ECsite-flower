@@ -51,9 +51,9 @@ export default function FlowerCard({ flower, layout = 'grid' }) {
     }
 
     return (
-        <Link href={route('flowers.show', flower.slug)} className="group block">
-            <div className="overflow-hidden rounded-lg border border-stone-100 bg-white shadow-sm transition hover:shadow-md">
-                <div className="relative aspect-[3/4] overflow-hidden bg-stone-100">
+        <Link href={route('flowers.show', flower.slug)} className="group flex h-full">
+            <div className="flex h-full w-full flex-col overflow-hidden rounded-lg border border-stone-100 bg-white shadow-sm transition hover:shadow-md">
+                <div className="relative aspect-[7/8] w-full shrink-0 overflow-hidden bg-white">
                     {flower.is_seasonal && (
                         <span className="absolute left-3 top-3 z-10 bg-white px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-stone-800">
                             New
@@ -63,15 +63,15 @@ export default function FlowerCard({ flower, layout = 'grid' }) {
                         <img
                             src={flower.image}
                             alt={flower.name}
-                            className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                            className="h-full w-full object-contain object-center transition duration-500 group-hover:scale-105"
                             loading="lazy"
                         />
                     ) : (
                         <div className="flex h-full items-center justify-center text-4xl">🌸</div>
                     )}
                 </div>
-                <div className="p-4 text-center">
-                    <h3 className="font-serif text-base text-stone-800 group-hover:text-bloom-700">
+                <div className="flex flex-1 flex-col p-4 text-center">
+                    <h3 className="line-clamp-2 min-h-[3rem] font-serif text-base text-stone-800 group-hover:text-bloom-700">
                         {flower.name}
                     </h3>
                     <p className="mt-1 text-sm text-stone-600">{formatYen(flower.price)}</p>
@@ -86,7 +86,7 @@ export default function FlowerCard({ flower, layout = 'grid' }) {
                             ))}
                         </div>
                     )}
-                    <p className="mt-2 text-xs text-stone-400 line-clamp-1">{flower.flower_language}</p>
+                    <p className="mt-2 line-clamp-1 text-xs text-stone-400">{flower.flower_language}</p>
                 </div>
             </div>
         </Link>
