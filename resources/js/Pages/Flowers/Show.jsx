@@ -1,16 +1,23 @@
 import ColorPalette from "@/Components/ColorPalette";
 import FlowerCard from "@/Components/FlowerCard";
+import InputError from "@/Components/InputError";
 import ShopLayout from "@/Layouts/ShopLayout";
 import { formatYen } from "@/Utils/format";
-import { Head, Link, useForm } from "@inertiajs/react";
+import { Head, Link, router, useForm } from "@inertiajs/react";
 import { useState } from "react";
 
 const Box = "div";
 
 export default function FlowersShow({ flower, related }) {
     const form = useForm({ flower_id: flower.id, quantity: 1 });
-    const cardForm = useForm({ item_type: "message_card", message: "" });
+    const cardForm = useForm({
+        item_type: "message_card",
+        flower_id: flower.id,
+        quantity: 1,
+        message: "",
+    });
     const [showMessageCard, setShowMessageCard] = useState(false);
+    const [cardSubmitting, setCardSubmitting] = useState(false);
     const palette = flower.color_palette ?? [];
 
     const addToCart = (e) => {
@@ -20,7 +27,22 @@ export default function FlowersShow({ flower, related }) {
 
     const addMessageCard = (e) => {
         e.preventDefault();
-        cardForm.post(route("cart.store"));
+        setCardSubmitting(true);
+        router.post(
+            route("cart.store"),
+            {
+                item_type: "message_card",
+                flower_id: flower.id,
+                quantity: Number(form.data.quantity) || 1,
+                message: cardForm.data.message ?? "",
+            },
+            {
+                onError: (errors) => {
+                    cardForm.setError(errors);
+                },
+                onFinish: () => setCardSubmitting(false),
+            },
+        );
     };
 
     return (
@@ -154,7 +176,7 @@ export default function FlowersShow({ flower, related }) {
                                 メッセージカード
                             </p>
                             <p className="mt-1 text-sm text-stone-500">
-                                無料（¥0）で花束に添えることができます。
+                                無料（¥0）。この商品と一緒にカートへ追加されます。
                             </p>
                             <textarea
                                 value={cardForm.data.message}
@@ -166,12 +188,23 @@ export default function FlowersShow({ flower, related }) {
                                 className="mt-3 w-full rounded-lg border-stone-200"
                                 placeholder="そばにいてくれてありがとう。あなたのことが大好きです。"
                             />
+                            <InputError
+                                message={
+                                    cardForm.errors.flower_id ||
+                                    cardForm.errors.quantity ||
+                                    cardForm.errors.message ||
+                                    cardForm.errors.item_type
+                                }
+                                className="mt-2"
+                            />
                             <button
                                 type="submit"
                                 className="btn-primary mt-4"
-                                disabled={cardForm.processing}
+                                disabled={cardSubmitting}
                             >
-                                カートに追加する
+                                {cardSubmitting
+                                    ? "追加中…"
+                                    : "商品とメッセージカードをカートに追加"}
                             </button>
                         </form>
                     )}

@@ -62,9 +62,48 @@ class CartService
         ]);
     }
 
+    public function addFlowerWithMessageCard(Flower $flower, int $quantity = 1, string $message = ''): void
+    {
+        $this->addFlower($flower, $quantity);
+        $this->addMessageCardForFlower($flower, $message);
+    }
+
+    public function addMessageCardForFlower(Flower $flower, string $message = ''): void
+    {
+        $existing = $this->items()->first(
+            fn (CartItem $item) => $item->isMessageCard() && (int) $item->flower_id === (int) $flower->id
+        );
+
+        $text = trim($message);
+
+        if ($existing) {
+            $messages = $existing->messageTexts();
+            $messages[] = $text;
+            $existing->update([
+                'quantity' => count($messages),
+                'bouquet_items' => array_map(fn ($t) => ['text' => $t], $messages),
+            ]);
+
+            return;
+        }
+
+        CartItem::create([
+            'user_id' => $this->request->user()?->id,
+            'session_id' => $this->request->user() ? null : $this->sessionId(),
+            'item_type' => 'bouquet',
+            'flower_id' => $flower->id,
+            'bouquet_name' => 'メッセージカード',
+            'bouquet_items' => [['text' => $text]],
+            'quantity' => 1,
+            'unit_price' => 0,
+        ]);
+    }
+
     public function addMessageCard(string $message = ''): void
     {
-        $existing = $this->items()->first(fn (CartItem $item) => $item->isMessageCard());
+        $existing = $this->items()->first(
+            fn (CartItem $item) => $item->isMessageCard() && blank($item->flower_id)
+        );
 
         $text = trim($message);
 

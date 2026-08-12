@@ -82,6 +82,18 @@ export default function CartIndex({ items, subtotal }) {
         }
     };
 
+    // 商品の直後に、その商品に付属したメッセージカードが来るように並べ替え
+    const orderedItems = [...items].sort((a, b) => {
+        const aKey = a.item_type === 'message_card'
+            ? `flower-${a.flower_id}-card`
+            : `flower-${a.flower_id || a.id}`;
+        const bKey = b.item_type === 'message_card'
+            ? `flower-${b.flower_id}-card`
+            : `flower-${b.flower_id || b.id}`;
+        if (aKey === bKey) return 0;
+        return aKey.localeCompare(bKey);
+    });
+
     return (
         <ShopLayout title="ショッピングカート">
             <Head title="カート" />
@@ -96,8 +108,11 @@ export default function CartIndex({ items, subtotal }) {
             ) : (
                 <div className="grid gap-10 lg:grid-cols-3">
                     <ul className="divide-y divide-stone-200 lg:col-span-2">
-                        {items.map((item) => (
-                            <li key={item.id} className="py-6">
+                        {orderedItems.map((item) => (
+                            <li
+                                key={item.id}
+                                className={`py-6 ${item.item_type === 'message_card' ? 'bg-stone-50/70 pl-4 sm:pl-8' : ''}`}
+                            >
                                 <div className="flex gap-4 sm:gap-6">
                                     {item.item_type === 'message_card' ? (
                                         <MessageCardThumb />
@@ -117,6 +132,11 @@ export default function CartIndex({ items, subtotal }) {
                                         <h3 className="font-serif text-lg text-stone-900">
                                             {item.display_name}
                                         </h3>
+                                        {item.item_type === 'message_card' && item.attached_flower_name && (
+                                            <p className="mt-0.5 text-sm text-stone-500">
+                                                「{item.attached_flower_name}」に添付
+                                            </p>
+                                        )}
                                         {item.item_type === 'bouquet' && item.bouquet_items && (
                                             <ul className="mt-1 space-y-0.5 text-sm text-stone-500">
                                                 {item.bouquet_items.map((bi, idx) => (

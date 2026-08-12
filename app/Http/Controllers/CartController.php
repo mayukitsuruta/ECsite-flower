@@ -23,6 +23,8 @@ class CartController extends Controller
                 'unit_price' => $item->unit_price,
                 'line_total' => $item->lineTotal(),
                 'flower' => $item->flower,
+                'flower_id' => $item->flower_id,
+                'attached_flower_name' => $item->isMessageCard() ? $item->flower?->name : null,
                 'bouquet_name' => $item->bouquet_name,
                 'bouquet_items' => $item->bouquet_items,
                 'message_texts' => $item->messageTexts(),
@@ -39,12 +41,19 @@ class CartController extends Controller
     {
         if ($request->input('item_type') === 'message_card') {
             $validated = $request->validate([
+                'flower_id' => ['required', 'exists:flowers,id'],
+                'quantity' => ['integer', 'min:1', 'max:99'],
                 'message' => ['nullable', 'string', 'max:200'],
             ]);
 
-            $cart->addMessageCard($validated['message'] ?? '');
+            $flower = Flower::active()->findOrFail($validated['flower_id']);
+            $cart->addFlowerWithMessageCard(
+                $flower,
+                $validated['quantity'] ?? 1,
+                $validated['message'] ?? ''
+            );
 
-            return redirect()->route('cart.index')->with('success', 'メッセージカードをカートに追加しました。');
+            return redirect()->route('cart.index')->with('success', '商品とメッセージカードをカートに追加しました。');
         }
 
         $validated = $request->validate([
@@ -87,7 +96,17 @@ class CartController extends Controller
     public function destroy(CartItem $cartItem, CartService $cart): RedirectResponse
     {
         $this->authorizeCartItem($cartItem, $cart);
-        $cartItem->delete();
+
+        // 商品を削除したら、付属のメッセージカードも削除
+        if ($cartItem->item_type === 'flower' && $cartItem->flower_id) {
+            $flowerId = $cartItem->flower_id;
+            $cartItem->delete();
+            $cart->items()
+                ->filter(fn (CartItem $item) => $item->isMessageCard() && (int) $item->flower_id === (int) $flowerId)
+                ->each->delete();
+        } else {
+            $cartItem->delete();
+        }
 
         return back()->with('success', 'カートから削除しました。');
     }
