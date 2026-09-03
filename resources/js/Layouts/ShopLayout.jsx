@@ -75,7 +75,7 @@ export default function ShopLayout({
 
                     <nav className="flex shrink-0 items-center gap-1 text-sm sm:gap-3">
                         <NavLink href={route("flowers.index")} home={home}>
-                            Shop
+                            花束一覧
                         </NavLink>
                         <NavLink
                             href={route("bouquet.builder")}

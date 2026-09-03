@@ -84,14 +84,14 @@ export default function CartIndex({ items, subtotal }) {
 
     // 商品の直後に、その商品に付属したメッセージカードが来るように並べ替え
     const orderedItems = [...items].sort((a, b) => {
-        const aKey = a.item_type === 'message_card'
-            ? `flower-${a.flower_id}-card`
-            : `flower-${a.flower_id || a.id}`;
-        const bKey = b.item_type === 'message_card'
-            ? `flower-${b.flower_id}-card`
-            : `flower-${b.flower_id || b.id}`;
-        if (aKey === bKey) return 0;
-        return aKey.localeCompare(bKey);
+        const aGroup = a.sort_group ?? `item-${a.attached_to_id ?? a.flower_id ?? a.id}`;
+        const bGroup = b.sort_group ?? `item-${b.attached_to_id ?? b.flower_id ?? b.id}`;
+        if (aGroup !== bGroup) {
+            return aGroup.localeCompare(bGroup, undefined, { numeric: true });
+        }
+        const aRank = a.item_type === 'message_card' ? 1 : 0;
+        const bRank = b.item_type === 'message_card' ? 1 : 0;
+        return aRank - bRank;
     });
 
     return (
@@ -139,7 +139,7 @@ export default function CartIndex({ items, subtotal }) {
                                         )}
                                         {item.item_type === 'bouquet' && item.bouquet_items && (
                                             <ul className="mt-1 space-y-0.5 text-sm text-stone-500">
-                                                {item.bouquet_items.map((bi, idx) => (
+                                                {item.bouquet_items.filter((bi) => bi.name).map((bi, idx) => (
                                                     <li key={idx}>
                                                         {bi.name} × {bi.quantity}
                                                     </li>

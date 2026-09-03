@@ -72,4 +72,59 @@ class CartItem extends Model
             $items
         );
     }
+
+    public function parentCartItemId(): ?int
+    {
+        if (! $this->isMessageCard()) {
+            return null;
+        }
+
+        $first = $this->bouquet_items[0] ?? [];
+
+        if (is_array($first) && isset($first['parent_cart_item_id'])) {
+            return (int) $first['parent_cart_item_id'];
+        }
+
+        return null;
+    }
+
+    public function attachedName(): ?string
+    {
+        if (! $this->isMessageCard()) {
+            return null;
+        }
+
+        if ($this->flower?->name) {
+            return $this->flower->name;
+        }
+
+        $first = $this->bouquet_items[0] ?? [];
+
+        if (is_array($first) && ! empty($first['attached_name'])) {
+            return (string) $first['attached_name'];
+        }
+
+        return null;
+    }
+
+    public function attachmentMeta(): array
+    {
+        $first = $this->bouquet_items[0] ?? [];
+
+        if (! is_array($first)) {
+            return [];
+        }
+
+        $meta = [];
+
+        if (isset($first['parent_cart_item_id'])) {
+            $meta['parent_cart_item_id'] = (int) $first['parent_cart_item_id'];
+        }
+
+        if (! empty($first['attached_name'])) {
+            $meta['attached_name'] = (string) $first['attached_name'];
+        }
+
+        return $meta;
+    }
 }

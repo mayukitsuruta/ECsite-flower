@@ -144,11 +144,11 @@ class CartService
 
         $item->update([
             'quantity' => count($normalized),
-            'bouquet_items' => $normalized,
+            'bouquet_items' => $this->messageRowsWithMeta($item, $texts),
         ]);
     }
 
-    public function addBouquet(string $name, array $composition, int $wrappingFee = 500): void
+    public function addBouquet(string $name, array $composition, int $wrappingFee = 500): CartItem
     {
         $total = $wrappingFee;
         $items = [];
@@ -166,7 +166,7 @@ class CartService
             ];
         }
 
-        CartItem::create([
+        return CartItem::create([
             'user_id' => $this->request->user()?->id,
             'session_id' => $this->request->user() ? null : $this->sessionId(),
             'item_type' => 'bouquet',
@@ -174,6 +174,29 @@ class CartService
             'bouquet_items' => $items,
             'quantity' => 1,
             'unit_price' => $total,
+        ]);
+    }
+
+    public function addBouquetWithMessageCard(string $name, array $composition, string $message = '', int $wrappingFee = 500): void
+    {
+        $bouquet = $this->addBouquet($name, $composition, $wrappingFee);
+        $this->addMessageCardForBouquet($bouquet, $message);
+    }
+
+    public function addMessageCardForBouquet(CartItem $bouquet, string $message = ''): void
+    {
+        CartItem::create([
+            'user_id' => $this->request->user()?->id,
+            'session_id' => $this->request->user() ? null : $this->sessionId(),
+            'item_type' => 'bouquet',
+            'bouquet_name' => 'メッセージカード',
+            'bouquet_items' => [[
+                'text' => trim($message),
+                'parent_cart_item_id' => $bouquet->id,
+                'attached_name' => $bouquet->bouquet_name ?? 'オリジナル花束',
+            ]],
+            'quantity' => 1,
+            'unit_price' => 0,
         ]);
     }
 
@@ -196,7 +219,7 @@ class CartService
 
             $item->update([
                 'quantity' => $quantity,
-                'bouquet_items' => array_map(fn ($t) => ['text' => $t], $messages),
+                'bouquet_items' => $this->messageRowsWithMeta($item, $messages),
             ]);
 
             return;
@@ -218,6 +241,16 @@ class CartService
             'user_id' => $userId,
             'session_id' => null,
         ]);
+    }
+
+    protected function messageRowsWithMeta(CartItem $item, array $texts): array
+    {
+        $meta = $item->attachmentMeta();
+
+        return array_values(array_map(
+            fn ($text) => array_merge($meta, ['text' => trim((string) $text)]),
+            $texts
+        ));
     }
 
     protected function sessionId(): string

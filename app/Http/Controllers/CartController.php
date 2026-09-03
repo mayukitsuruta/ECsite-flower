@@ -24,7 +24,13 @@ class CartController extends Controller
                 'line_total' => $item->lineTotal(),
                 'flower' => $item->flower,
                 'flower_id' => $item->flower_id,
-                'attached_flower_name' => $item->isMessageCard() ? $item->flower?->name : null,
+                'attached_flower_name' => $item->isMessageCard() ? $item->attachedName() : null,
+                'attached_to_id' => $item->isMessageCard()
+                    ? ($item->flower_id ?? $item->parentCartItemId())
+                    : ($item->flower_id ?? $item->id),
+                'sort_group' => $item->isMessageCard()
+                    ? ($item->flower_id ? 'f-'.$item->flower_id : 'b-'.$item->parentCartItemId())
+                    : ($item->item_type === 'flower' ? 'f-'.$item->flower_id : 'b-'.$item->id),
                 'bouquet_name' => $item->bouquet_name,
                 'bouquet_items' => $item->bouquet_items,
                 'message_texts' => $item->messageTexts(),
@@ -98,11 +104,19 @@ class CartController extends Controller
         $this->authorizeCartItem($cartItem, $cart);
 
         // 商品を削除したら、付属のメッセージカードも削除
-        if ($cartItem->item_type === 'flower' && $cartItem->flower_id) {
+        if ($cartItem->isMessageCard()) {
+            $cartItem->delete();
+        } elseif ($cartItem->item_type === 'flower' && $cartItem->flower_id) {
             $flowerId = $cartItem->flower_id;
             $cartItem->delete();
             $cart->items()
                 ->filter(fn (CartItem $item) => $item->isMessageCard() && (int) $item->flower_id === (int) $flowerId)
+                ->each->delete();
+        } elseif ($cartItem->item_type === 'bouquet') {
+            $bouquetId = $cartItem->id;
+            $cartItem->delete();
+            $cart->items()
+                ->filter(fn (CartItem $item) => $item->isMessageCard() && $item->parentCartItemId() === $bouquetId)
                 ->each->delete();
         } else {
             $cartItem->delete();

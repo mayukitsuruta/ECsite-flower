@@ -27,6 +27,8 @@ class BouquetBuilderController extends Controller
             'items' => ['required', 'array', 'min:1'],
             'items.*.flower_id' => ['required', 'exists:flowers,id'],
             'items.*.quantity' => ['required', 'integer', 'min:1', 'max:20'],
+            'with_message_card' => ['sometimes', 'boolean'],
+            'message' => ['nullable', 'string', 'max:200'],
         ]);
 
         $composition = collect($validated['items'])
@@ -36,6 +38,16 @@ class BouquetBuilderController extends Controller
 
         if (empty($composition)) {
             return back()->withErrors(['items' => '花を1つ以上選んでください。']);
+        }
+
+        if ($request->boolean('with_message_card')) {
+            $cart->addBouquetWithMessageCard(
+                $validated['bouquet_name'],
+                $composition,
+                $validated['message'] ?? ''
+            );
+
+            return redirect()->route('cart.index')->with('success', 'オリジナル花束とメッセージカードをカートに追加しました。');
         }
 
         $cart->addBouquet($validated['bouquet_name'], $composition);

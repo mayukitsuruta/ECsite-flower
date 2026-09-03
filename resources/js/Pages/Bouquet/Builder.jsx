@@ -1,5 +1,6 @@
 import ColorPalette from '@/Components/ColorPalette';
 import ColorSwatch from '@/Components/ColorSwatch';
+import InputError from '@/Components/InputError';
 import ShopHero from '@/Components/ShopHero';
 import ShopLayout from '@/Layouts/ShopLayout';
 import { formatYen } from '@/Utils/format';
@@ -13,6 +14,8 @@ export default function BouquetBuilder({ flowers, categories, wrappingFee }) {
     const [bouquetName, setBouquetName] = useState('想いの花束');
     const [quantities, setQuantities] = useState({});
     const [colorFilter, setColorFilter] = useState(null);
+    const [showMessageCard, setShowMessageCard] = useState(false);
+    const [message, setMessage] = useState('');
 
     const form = useForm({ bouquet_name: bouquetName, items: [] });
 
@@ -56,15 +59,26 @@ export default function BouquetBuilder({ flowers, categories, wrappingFee }) {
         .map((i) => `${i.flower.name}：${i.flower.flower_language}`)
         .join(' / ');
 
+    const bouquetPayload = (withCard = false) => ({
+        bouquet_name: bouquetName,
+        items: selectedItems.map((i) => ({
+            flower_id: i.flower.id,
+            quantity: i.quantity,
+        })),
+        ...(withCard
+            ? { with_message_card: true, message: message ?? '' }
+            : {}),
+    });
+
     const submit = (e) => {
         e.preventDefault();
-        form.transform(() => ({
-            bouquet_name: bouquetName,
-            items: selectedItems.map((i) => ({
-                flower_id: i.flower.id,
-                quantity: i.quantity,
-            })),
-        }));
+        form.transform(() => bouquetPayload(false));
+        form.post(route('bouquet.store'));
+    };
+
+    const submitWithMessageCard = (e) => {
+        e.preventDefault();
+        form.transform(() => bouquetPayload(true));
         form.post(route('bouquet.store'));
     };
 
@@ -81,7 +95,7 @@ export default function BouquetBuilder({ flowers, categories, wrappingFee }) {
                 ]}
             />
 
-            <form onSubmit={submit} className="mt-8">
+            <Box className="mt-8">
                 {/* カラーフィルター（2枚目参考） */}
                 <Box className="mb-8 rounded-xl border border-stone-200 bg-stone-50 p-6">
                     <h2 className="font-serif text-sm font-semibold uppercase tracking-wider text-stone-800">
@@ -207,13 +221,61 @@ export default function BouquetBuilder({ flowers, categories, wrappingFee }) {
                                 <p className="mt-4 border-t border-stone-100 pt-4 text-lg font-medium">
                                     合計 {formatYen(total)}
                                 </p>
-                                <button
-                                    type="submit"
-                                    className="btn-primary mt-6 w-full"
-                                    disabled={form.processing}
-                                >
-                                    カートに追加
-                                </button>
+                                <form onSubmit={submit} className="mt-6 space-y-3">
+                                    <button
+                                        type="submit"
+                                        className="btn-primary w-full"
+                                        disabled={form.processing}
+                                    >
+                                        カートに追加
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="btn-secondary w-full"
+                                        onClick={() => setShowMessageCard((open) => !open)}
+                                    >
+                                        メッセージカードをつける
+                                    </button>
+                                </form>
+                                <InputError
+                                    message={form.errors.items || form.errors.bouquet_name}
+                                    className="mt-2"
+                                />
+
+                                {showMessageCard && (
+                                    <form
+                                        onSubmit={submitWithMessageCard}
+                                        className="mt-4 rounded-xl border border-stone-200 bg-stone-50 p-5"
+                                    >
+                                        <p className="font-serif text-base text-stone-800">
+                                            メッセージカード
+                                        </p>
+                                        <p className="mt-1 text-sm text-stone-500">
+                                            無料（¥0）。この花束と一緒にカートへ追加されます。
+                                        </p>
+                                        <textarea
+                                            value={message}
+                                            onChange={(e) => setMessage(e.target.value)}
+                                            rows={3}
+                                            maxLength={200}
+                                            className="mt-3 w-full rounded-lg border-stone-200"
+                                            placeholder="そばにいてくれてありがとう。あなたのことが大好きです。"
+                                        />
+                                        <InputError
+                                            message={form.errors.message}
+                                            className="mt-2"
+                                        />
+                                        <button
+                                            type="submit"
+                                            className="btn-primary mt-4 w-full"
+                                            disabled={form.processing}
+                                        >
+                                            {form.processing
+                                                ? '追加中…'
+                                                : '花束とメッセージカードをカートに追加'}
+                                        </button>
+                                    </form>
+                                )}
                             </>
                         ) : (
                             <p className="mt-6 text-sm text-stone-500">
@@ -222,7 +284,7 @@ export default function BouquetBuilder({ flowers, categories, wrappingFee }) {
                         )}
                     </aside>
                 </Box>
-            </form>
+            </Box>
         </ShopLayout>
     );
 }
