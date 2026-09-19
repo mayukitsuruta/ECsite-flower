@@ -37,21 +37,14 @@ export default function ShopLayout({
                 <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
                     <Link
                         href={route("home")}
-                        className="group flex shrink-0 items-center gap-3"
+                        aria-label={`${shop?.name ?? "omoi Bouquet"} ホーム`}
+                        className="group flex shrink-0 items-center"
                     >
-                        {home && (
-                            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-bloom-600 text-lg text-white shadow-sm">
-                                🌸
-                            </span>
-                        )}
-                        <div>
-                            <p className="font-serif text-xl tracking-wide text-stone-900 group-hover:text-bloom-700">
-                                {shop?.name ?? "想い束"}
-                            </p>
-                            <p className="hidden text-xs text-stone-400 sm:block">
-                                {home ? "flower shop" : "flower shop"}
-                            </p>
-                        </div>
+                        <img
+                            src="/images/logo.png"
+                            alt={shop?.name ?? "omoi Bouquet"}
+                            className="h-12 w-auto object-contain transition group-hover:opacity-80 sm:h-16"
+                        />
                     </Link>
 
                     <form
