@@ -39,52 +39,23 @@ export default function Home({ seasonalFlowers, shopFlowers }) {
             <Head title="トップ" />
 
             {/* Hero */}
-            <section className="relative bg-cream px-4 pb-16 pt-6 sm:px-6 lg:px-8">
-                <div className="mx-auto max-w-5xl">
-                    <div className="relative mx-auto max-w-4xl">
-                        <div className="arch-image relative mx-auto aspect-[16/10] w-full overflow-hidden shadow-xl sm:aspect-[2/1]">
-                            <img
-                                src={HERO_IMAGE}
-                                alt="Omoi Bouquet 店舗外観"
-                                className="h-full w-full object-cover object-center"
-                            />
-                            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-stone-900/55 to-transparent pb-6 pt-16 sm:pb-8 sm:pt-20">
-                                <h1 className="text-center font-serif text-3xl font-bold tracking-wide text-white sm:text-5xl">
-                                    Omoi Bouquet
-                                </h1>
-                            </div>
-                        </div>
-                        <img
-                            src={IMG.hana1}
-                            alt=""
-                            aria-hidden
-                            className="pointer-events-none absolute -left-10 top-6 h-20 w-20 object-contain sm:-left-20 sm:top-8 sm:h-32 sm:w-32 lg:-left-28 lg:h-40 lg:w-40"
-                        />
-                        <img
-                            src={IMG.hana2}
-                            alt=""
-                            aria-hidden
-                            className="pointer-events-none absolute -right-8 top-10 h-16 w-16 object-contain sm:-right-20 sm:h-28 sm:w-28 lg:-right-28 lg:h-36 lg:w-36"
-                        />
-                        <img
-                            src={IMG.hana3}
-                            alt=""
-                            aria-hidden
-                            className="pointer-events-none absolute -bottom-4 -left-6 h-16 w-16 object-contain sm:-bottom-6 sm:-left-16 sm:h-28 sm:w-28 lg:-left-24 lg:h-36 lg:w-36"
-                        />
-                        <img
-                            src={IMG.hana4}
-                            alt=""
-                            aria-hidden
-                            className="pointer-events-none absolute -bottom-6 -right-4 h-20 w-20 object-contain sm:-bottom-8 sm:-right-14 sm:h-32 sm:w-32 lg:-right-24 lg:h-40 lg:w-40"
-                        />
+            <section className="bg-cream">
+                <div className="relative h-[calc(100dvh-9rem)] w-full overflow-hidden sm:h-[calc(100dvh-5.75rem)]">
+                    <img
+                        src={HERO_IMAGE}
+                        alt="Omoi Bouquet 店舗外観"
+                        className="h-full w-full object-cover object-center"
+                    />
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-stone-900/60 to-transparent px-4 pb-8 pt-20 sm:pb-12 sm:pt-28">
+                        <h1 className="text-center font-serif text-3xl font-bold tracking-wide text-white sm:text-5xl">
+                            Omoi Bouquet
+                        </h1>
+                        <p className="mx-auto mt-4 max-w-xl text-center text-sm leading-relaxed text-white/90 sm:text-base">
+                            大切な人への想いを、花で束ねる。
+                            <br className="hidden sm:block" />
+                            花言葉を見ながら選んで、あなただけの一点ものを。
+                        </p>
                     </div>
-
-                    <p className="mx-auto mt-10 max-w-xl text-center text-sm leading-relaxed text-stone-600 sm:text-base">
-                        大切な人への想いを、花で束ねる。
-                        <br className="hidden sm:block" />
-                        花言葉を見ながら選んで、あなただけの一点ものを。
-                    </p>
                 </div>
             </section>
 
