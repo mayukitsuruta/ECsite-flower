@@ -45,12 +45,12 @@ export default function Home({ seasonalFlowers, shopFlowers }) {
                         <div className="arch-image relative mx-auto aspect-[16/10] w-full overflow-hidden shadow-xl sm:aspect-[2/1]">
                             <img
                                 src={HERO_IMAGE}
-                                alt="想い束 店舗外観"
+                                alt="Omoi Bouquet 店舗外観"
                                 className="h-full w-full object-cover object-center"
                             />
                             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-stone-900/55 to-transparent pb-6 pt-16 sm:pb-8 sm:pt-20">
                                 <h1 className="text-center font-serif text-3xl font-bold tracking-wide text-white sm:text-5xl">
-                                    Omoibouquet
+                                    Omoi Bouquet
                                 </h1>
                             </div>
                         </div>
@@ -280,7 +280,7 @@ export default function Home({ seasonalFlowers, shopFlowers }) {
                             About
                         </h2>
                         <p className="mt-6 text-sm leading-loose text-stone-600">
-                            想い束は、ネットで注文して店舗で受け取れる
+                            Omoi Bouquetは、ネットで注文して店舗で受け取れる
                             花屋です。おまかせのブーケではなく、
                             一本一本あなたの手で選んだ花を束ねる。
                             花言葉を大切に、贈る想いに寄り添う
@@ -345,7 +345,7 @@ export default function Home({ seasonalFlowers, shopFlowers }) {
                             Access
                         </p>
                         <h2 className="mt-1 font-serif text-2xl text-stone-900">
-                            想い束 渋谷店
+                            Omoi Bouquet 渋谷店
                         </h2>
                         <dl className="mt-6 space-y-3 text-sm text-stone-600">
                             <div>

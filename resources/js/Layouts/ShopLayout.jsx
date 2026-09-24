@@ -40,12 +40,12 @@ export default function ShopLayout({
                 <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
                     <Link
                         href={route("home")}
-                        aria-label={`${shop?.name ?? "omoi Bouquet"} ホーム`}
+                        aria-label={`${shop?.name ?? "Omoi Bouquet"} ホーム`}
                         className="group flex shrink-0 items-center"
                     >
                         <img
                             src="/images/logo.png"
-                            alt={shop?.name ?? "omoi Bouquet"}
+                            alt={shop?.name ?? "Omoi Bouquet"}
                             className="h-12 w-auto object-contain transition group-hover:opacity-80 sm:h-16"
                         />
                     </Link>

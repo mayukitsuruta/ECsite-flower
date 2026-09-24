@@ -49,8 +49,8 @@ class CheckoutController extends Controller
             'subtotal' => $cart->subtotal(),
             'messageFromCart' => $messageFromCart,
             'stores' => [
-                'omoi-shibuya' => '想い束 渋谷店（東京都渋谷区神南1-1-1）',
-                'omoi-nakameguro' => '想い束 中目黒店（東京都目黒区上目黑2-2-2）',
+                'omoi-shibuya' => 'Omoi Bouquet 渋谷店（東京都渋谷区神南1-1-1）',
+                'omoi-nakameguro' => 'Omoi Bouquet 中目黒店（東京都目黒区上目黑2-2-2）',
             ],
         ]);
     }

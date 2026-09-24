@@ -1,4 +1,4 @@
-# 想い束 Omoi Bloom — セットアップ手順（MAMP）
+# Omoi Bouquet — セットアップ手順（MAMP）
 
 フラワーECサイトのローカル環境構築手順です。
 
