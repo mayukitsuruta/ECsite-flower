@@ -150,114 +150,94 @@ export default function ShopLayout({
 
             <main className={mainClass}>{children}</main>
 
-            {!home && (
-                <footer className="mt-20 border-t border-stone-200 bg-stone-50">
-                    <p className="py-12 text-center font-serif text-3xl tracking-wide text-stone-300 sm:text-4xl">
-                        omoi bouquet.jp
-                    </p>
-                    <FooterGrid />
-                    <p className="border-t border-stone-200 py-4 text-center text-xs text-stone-400">
-                        © {new Date().getFullYear()} {shop?.name}
-                    </p>
-                </footer>
-            )}
-
-            {home && (
-                <footer className="border-t border-cream-200 bg-cream py-6">
-                    <p className="text-center text-xs text-stone-400">
-                        © {new Date().getFullYear()} {shop?.name ?? "想い束"}
-                    </p>
-                </footer>
-            )}
-
-            <a
-                href="#"
-                className="fixed bottom-6 right-6 z-50 rounded-full bg-bloom-700 px-5 py-3 text-sm font-medium text-white shadow-lg transition hover:bg-bloom-800"
-            >
-                Chat
-            </a>
+            <ShopFooter shop={shop} />
 
             <FlashMessage />
         </div>
     );
 }
 
-function FooterGrid() {
+function ShopFooter({ shop }) {
+    const strip = (prefix) =>
+        Array.from({ length: 10 }, (_, i) => (
+            <img
+                key={`${prefix}-${i}`}
+                src="/images/footerue.png"
+                alt=""
+                className="h-12 w-auto shrink-0 sm:h-16"
+            />
+        ));
+
     return (
-        <div className="mx-auto grid max-w-7xl gap-10 px-4 pb-12 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-8">
-            <div>
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-stone-800">
-                    店舗
-                </h4>
-                <p className="mt-3 text-sm leading-relaxed text-stone-600">
-                    想い束 渋谷店
-                    <br />
-                    東京都渋谷区神南1-1-1
-                </p>
-            </div>
-            <div>
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-stone-800">
-                    アカウント
-                </h4>
-                <ul className="mt-3 space-y-2 text-sm text-stone-600">
-                    <li>
-                        <Link
-                            href={route("login")}
-                            className="hover:text-bloom-700"
-                        >
-                            ログイン
-                        </Link>
-                    </li>
-                    <li>
-                        <Link
-                            href={route("register")}
-                            className="hover:text-bloom-700"
-                        >
-                            会員登録
-                        </Link>
-                    </li>
-                    <li>
-                        <Link
-                            href={route("orders.index")}
-                            className="hover:text-bloom-700"
-                        >
-                            注文履歴
-                        </Link>
-                    </li>
-                </ul>
-            </div>
-            <div>
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-stone-800">
-                    ヘルプ
-                </h4>
-                <ul className="mt-3 space-y-2 text-sm text-stone-600">
-                    <li>店舗受け取りについて</li>
-                    <li>配送について</li>
-                    <li>お問い合わせ</li>
-                </ul>
-            </div>
-            <div>
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-stone-800">
-                    Newsletter
-                </h4>
-                <p className="mt-3 text-sm text-stone-600">
-                    季節の花のお知らせをお届け
-                </p>
-                <div className="mt-3 flex gap-2">
-                    <input
-                        type="email"
-                        placeholder="メールアドレス"
-                        className="flex-1 rounded border-stone-300 text-sm"
-                    />
-                    <button
-                        type="button"
-                        className="rounded bg-stone-800 px-3 py-1.5 text-xs text-white"
-                    >
-                        登録
-                    </button>
+        <footer className="mt-16 bg-white">
+            <div className="overflow-hidden" aria-hidden>
+                <div className="marquee-track flex w-max">
+                    <div className="flex shrink-0 items-center">{strip("a")}</div>
+                    <div className="flex shrink-0 items-center">{strip("b")}</div>
                 </div>
             </div>
-        </div>
+
+            <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+                <div className="flex flex-col gap-12 lg:flex-row lg:items-start lg:justify-between">
+                    <div className="max-w-sm">
+                        <p className="font-serif text-3xl text-stone-800 sm:text-4xl">
+                            Omoi Bouquet
+                        </p>
+                        <p className="mt-4 text-sm leading-relaxed text-stone-500">
+                            Feelings curated, defined by posture.
+                            <br />
+                            Where unique bouquets speak louder than words,
+                            <br />
+                            shaping the thoughtful gift of contemporary life.
+                        </p>
+                    </div>
+
+                    <div className="flex gap-16 text-sm text-stone-600">
+                        <div>
+                            <h4 className="mb-3 text-stone-800">アカウント</h4>
+                            <ul className="space-y-2">
+                                <li>
+                                    <Link
+                                        href={route("login")}
+                                        className="hover:text-bloom-700"
+                                    >
+                                        ログイン
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        href={route("register")}
+                                        className="hover:text-bloom-700"
+                                    >
+                                        会員登録
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        href={route("orders.index")}
+                                        className="hover:text-bloom-700"
+                                    >
+                                        注文履歴
+                                    </Link>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 className="mb-3 text-stone-800">ヘルプ</h4>
+                            <ul className="space-y-2">
+                                <li>店舗受け取りについて</li>
+                                <li>配送について</li>
+                                <li>お問い合わせ</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <p className="mt-16 text-xs text-stone-400">
+                    © {new Date().getFullYear()} {shop?.name ?? "Omoi Bouquet"}
+                </p>
+            </div>
+        </footer>
     );
 }
 

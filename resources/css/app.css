@@ -41,7 +41,7 @@
     }
 
     .marquee-track {
-        animation: marquee 25s linear infinite;
+        animation: marquee 70s linear infinite;
     }
 
     .color-blob {
@@ -55,5 +55,11 @@
     }
     100% {
         transform: translateX(-50%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .marquee-track {
+        animation: none;
     }
 }
