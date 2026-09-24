@@ -13,18 +13,23 @@ const IMG = {
     hana4: "/images/hana4.png",
 };
 
+const NEWS_IMAGE = HERO_IMAGE;
+
 const NEWS_ITEMS = [
     {
         date: "2026.07.01",
         title: "夏の新作花束、取り扱い開始しました",
+        image: NEWS_IMAGE,
     },
     {
         date: "2026.06.15",
         title: "店舗受け取りの営業時間変更のお知らせ",
+        image: NEWS_IMAGE,
     },
     {
         date: "2026.06.01",
         title: "母の日ギフト、ご好評につき再入荷しました",
+        image: NEWS_IMAGE,
     },
 ];
 
@@ -201,31 +206,29 @@ export default function Home({ seasonalFlowers, shopFlowers }) {
                         お知らせ
                     </h2>
                     <div className="mt-8 grid gap-6 sm:grid-cols-3">
-                        {[SHOP_INTERIOR, HERO_IMAGE, SHOP_INTERIOR].map(
-                            (img, i) => (
-                                <article
-                                    key={i}
-                                    className="overflow-hidden rounded-xl bg-white shadow-sm"
-                                >
-                                    <div className="aspect-[4/3] overflow-hidden">
-                                        <img
-                                            src={img}
-                                            alt=""
-                                            className="h-full w-full object-cover"
-                                            loading="lazy"
-                                        />
-                                    </div>
-                                    <div className="p-4">
-                                        <time className="text-xs text-stone-400">
-                                            {NEWS_ITEMS[i]?.date}
-                                        </time>
-                                        <p className="mt-1 text-sm leading-relaxed text-stone-700">
-                                            {NEWS_ITEMS[i]?.title}
-                                        </p>
-                                    </div>
-                                </article>
-                            ),
-                        )}
+                        {NEWS_ITEMS.map((item) => (
+                            <article
+                                key={item.date}
+                                className="overflow-hidden rounded-xl bg-white shadow-sm"
+                            >
+                                <div className="aspect-[4/3] overflow-hidden">
+                                    <img
+                                        src={item.image}
+                                        alt=""
+                                        className="h-full w-full object-cover"
+                                        loading="lazy"
+                                    />
+                                </div>
+                                <div className="p-4">
+                                    <time className="text-xs text-stone-400">
+                                        {item.date}
+                                    </time>
+                                    <p className="mt-1 text-sm leading-relaxed text-stone-700">
+                                        {item.title}
+                                    </p>
+                                </div>
+                            </article>
+                        ))}
                     </div>
                 </div>
             </section>
