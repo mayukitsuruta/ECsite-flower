@@ -43,6 +43,10 @@
     .marquee-track {
         animation: marquee 25s linear infinite;
     }
+
+    .color-blob {
+        @apply transition duration-200 hover:scale-110;
+    }
 }
 
 @keyframes marquee {

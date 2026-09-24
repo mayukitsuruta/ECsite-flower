@@ -8,14 +8,17 @@ export default function ShopLayout({
     wide = false,
     hideTitle = false,
     home = false,
+    hideSearch = false,
+    flush = false,
 }) {
     const { auth, cartCount, shop } = usePage().props;
     const [searchQuery, setSearchQuery] = useState("");
-    const mainClass = home
-        ? ""
-        : wide
-          ? "mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8"
-          : "mx-auto max-w-6xl px-4 py-8 sm:px-6";
+    const mainClass =
+        home || flush
+            ? ""
+            : wide
+              ? "mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8"
+              : "mx-auto max-w-6xl px-4 py-8 sm:px-6";
 
     const handleSearch = (e) => {
         e.preventDefault();
@@ -47,29 +50,28 @@ export default function ShopLayout({
                         />
                     </Link>
 
-                    <form
-                        onSubmit={handleSearch}
-                        className="order-last flex w-full min-w-0 flex-1 items-center gap-2 sm:order-none sm:mx-4 sm:max-w-md lg:max-w-lg"
-                    >
-                        <input
-                            type="search"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            placeholder="花の名前・花言葉で検索…"
-                            className="w-full rounded-full border-stone-300 bg-white px-4 py-2 text-sm shadow-sm focus:border-bloom-400 focus:ring-bloom-400"
-                        />
-                        <button
-                            type="submit"
-                            className="shrink-0 rounded-full bg-bloom-600 px-4 py-2 text-xs font-medium text-white transition hover:bg-bloom-700 sm:text-sm"
+                    {!hideSearch && (
+                        <form
+                            onSubmit={handleSearch}
+                            className="order-last flex w-full min-w-0 flex-1 items-center gap-2 sm:order-none sm:mx-4 sm:max-w-md lg:max-w-lg"
                         >
-                            細かく検索
-                        </button>
-                    </form>
+                            <input
+                                type="search"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                placeholder="花の名前・花言葉で検索…"
+                                className="w-full rounded-full border-stone-300 bg-white px-4 py-2 text-sm shadow-sm focus:border-bloom-400 focus:ring-bloom-400"
+                            />
+                            <button
+                                type="submit"
+                                className="shrink-0 rounded-full bg-bloom-600 px-4 py-2 text-xs font-medium text-white transition hover:bg-bloom-700 sm:text-sm"
+                            >
+                                細かく検索
+                            </button>
+                        </form>
+                    )}
 
                     <nav className="flex shrink-0 items-center gap-1 text-sm sm:gap-3">
-                        <NavLink href={route("flowers.index")} home={home}>
-                            花束一覧
-                        </NavLink>
                         <NavLink
                             href={route("bouquet.builder")}
                             home={home}
